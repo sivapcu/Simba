@@ -1,0 +1,27 @@
+{
+  "name": "simba",
+  "description": "Simba - The Lion King",
+  "main": "server.js",
+  "authors": [
+    "sivapcu <siva.pcu@gmail.com>"
+  ],
+  "license": "GPL-2.0",
+  "homepage": "https://github.com/sivapcu/Simba",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.6.3",
+    "animate.css": "^3.5.2"
+  }
+}

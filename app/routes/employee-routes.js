@@ -2,7 +2,7 @@
 
 let employee = require('../models/employee');
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
     /**
     * Server routes shall come here. Handle things like api calls, Authentication routes etc
     */

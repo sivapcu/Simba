@@ -1,0 +1,41 @@
+<div class="col-sm-6 col-sm-offset-3">
+
+    <h1><span class="fa fa-sign-in"></span> Signup</h1>
+
+    <!-- show any messages that come back with authentication -->
+    <div class="alert alert-danger" ng-show="message" ng-if="error">{{message}}</div>
+    <div class="alert alert-success" ng-show="message" ng-if="!error">{{message}}</div>
+
+    <!-- Signup FORM -->
+    <form name="signupForm" ng-submit="signup()" role="form">
+        <div class="form-group" ng-class="{ 'has-error': signupForm.email.$touched && signupForm.email.$invalid }">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" ng-model="email" ng-minlength="5" ng-maxlength="20" required/>
+            <div class="help-block" ng-messages="signupForm.email.$error" ng-if="signupForm.email.$touched">
+                <p ng-message="required">Email is required</p>
+                <p ng-message="minlength">Email is too short</p>
+                <p ng-message="maxlength">Email is too long</p>
+                <p ng-message="email">Not a valid email</p>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': signupForm.password.$touched && signupForm.password.$invalid }">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" ng-model="password" ng-minlength="5" ng-maxlength="20" required/>
+            <div class="help-block" ng-messages="signupForm.password.$error" ng-if="signupForm.password.$touched">
+                <p ng-message="required">Password is required</p>
+                <p ng-message="minlength">Password is too short</p>
+                <p ng-message="maxlength">Password is too long</p>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-warning btn-lg" ng-disabled="signupForm.$invalid || dataLoading" >Signup</button>
+            <img src="assets/img/loading.gif" alt="loading..." width="30" height="30" ng-if="dataLoading" />
+        </div>
+    </form>
+
+    <hr>
+
+    <p>Already have an account? <a href="/login">Login</a></p>
+    <p>Or go <a href="/">Home</a>.</p>
+
+</div>

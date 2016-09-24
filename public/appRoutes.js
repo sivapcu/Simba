@@ -7,11 +7,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
         controller: 'MainCtrl'
     })
     .when('/login', {
-        templateUrl: 'home/view/login.html',
+        templateUrl: 'authentication/view/login.html',
         controller: 'LoginCtrl'
     })
     .when('/signup', {
-        templateUrl: 'home/view/signup.html',
+        templateUrl: 'authentication/view/signup.html',
         controller: 'SignupCtrl'
     })
     .when('/profile', {

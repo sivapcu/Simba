@@ -1,0 +1,22 @@
+[2016-09-25 19:12:19.636] [INFO] startup - Express server listening on port  3000  with pid  37180
+[2016-09-25 19:12:20.024] [INFO] startup - Express server listening on port  3000  with pid  3756
+[2016-09-25 19:12:20.671] [INFO] startup - Express server listening on port  3000  with pid  34956
+[2016-09-25 19:12:21.653] [INFO] startup - Express server listening on port  3000  with pid  1812
+[2016-09-25 19:13:47.638] [INFO] http - ::1 - - "POST /api/login HTTP/1.1" 200 142 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
+[2016-09-25 19:13:47.682] [WARN] http - ::1 - - "POST /api/profile HTTP/1.1" 302 23 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
+[2016-09-25 19:19:20.491] [INFO] startup - Express server listening on port  3000  with pid  6116
+[2016-09-25 19:19:20.618] [INFO] startup - Express server listening on port  3000  with pid  36660
+[2016-09-25 19:19:21.436] [INFO] startup - Express server listening on port  3000  with pid  40320
+[2016-09-25 19:19:22.524] [INFO] startup - Express server listening on port  3000  with pid  7180
+[2016-09-25 19:19:32.449] [DEBUG] index-routes - This is in /api/login post method handler
+[2016-09-25 19:19:32.613] [INFO] http - ::1 - - "POST /api/login HTTP/1.1" 200 142 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
+[2016-09-25 19:19:32.635] [DEBUG] index-routes - This is in isLoggedIn() method
+[2016-09-25 19:19:32.653] [WARN] http - ::1 - - "POST /api/profile HTTP/1.1" 302 23 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
+[2016-09-25 19:22:39.499] [INFO] startup - Express server listening on port  3000  with pid  31940
+[2016-09-25 19:22:39.510] [INFO] startup - Express server listening on port  3000  with pid  31424
+[2016-09-25 19:22:41.691] [INFO] startup - Express server listening on port  3000  with pid  38476
+[2016-09-25 19:22:42.324] [INFO] startup - Express server listening on port  3000  with pid  15416
+[2016-09-25 19:23:09.287] [DEBUG] index-routes - This is in /api/login post method handler
+[2016-09-25 19:23:09.482] [INFO] http - ::1 - - "POST /api/login HTTP/1.1" 200 142 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
+[2016-09-25 19:23:09.497] [DEBUG] index-routes - This is in isLoggedIn() method
+[2016-09-25 19:23:09.516] [WARN] http - ::1 - - "POST /api/profile HTTP/1.1" 302 23 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"

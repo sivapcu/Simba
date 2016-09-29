@@ -1,5 +1,9 @@
 var LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+
 var User = require('../app/models/user');
+
+var authConfig = require('./auth');
 
 module.exports = function(passport) {
     /**
@@ -45,7 +49,7 @@ module.exports = function(passport) {
                     }
                     // check to see if theres already a user with that email
                     if (user) {
-                        return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                        return done(null, false, 'That email is already taken!');
                     } else {
                         // if there is no user with that email, create the user
                         var newUser = new User();
@@ -56,11 +60,82 @@ module.exports = function(passport) {
                             if (err) {
                                 throw err;
                             }
-                            return done(null, newUser, req.flash('signupMessage', 'Signup Successful for : '+newUser.local.email));
+                            return done(null, newUser, 'Registration Successful!');
                         });
                     }
                 });
             });
         })
     );
+
+    /**
+     * Local Login
+     * We are using named strategies since we have one for login and one for signup.
+     * By default, if there was no name, it would just be called 'local'
+     */
+    passport.use('local-login', new LocalStrategy({
+        // by default, local strategy uses username and password, we will override with email
+        usernameField : 'email',
+        passwordField : 'password',
+        passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+    function(req, email, password, done){ // callback with email and password from our form
+        // check if user email exists in database
+        User.findOne({'local.email' : email }, function(err, user){
+            //if there are any errors, return the error
+            if(err) {
+                return done(err);
+            }
+
+            // if user not found, return the message using flash
+            if(!user) {
+                return done(null, false, 'Invalid Username or Password!');
+            }
+
+            // if user found but password is wrong, return the message using flash
+            if(!user.validPassword(password)) {
+                return done(null, false, 'Invalid Username or Password!');
+            }
+
+            // all is well, return successful user
+            return done(null, user, 'Login Successful!');
+        });
+    }));
+
+    //facebook login strategy
+	passport.use('facebook', new FacebookStrategy({
+		clientID: authConfig.facebookAuth.clientID,
+		clientSecret: authConfig.facebookAuth.clientSecret,
+		callbackURL: authConfig.facebookAuth.callbackURL
+	}, function(accessToken, refreshToken, profile, done){
+
+		process.nextTick(function(){
+			console.log(accessToken);
+			console.log(refreshToken);
+			console.log(profile);
+			User.findOne({'facebook.id': profile.id}, function(err, user){
+				if(err) {
+                    return done(err);
+                }
+
+				if(user) {
+                    return done(null, user);
+                } else{
+					var newUser = new User();
+					newUser.facebook.id = profile.id;
+					newUser.facebook.token = accessToken;
+					newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+					newUser.facebook.email = profile.emails[0].value;
+
+					newUser.save(function(err){
+						if(err) {
+                            return done(err);
+                        }
+						return done(null, newUser);
+					});
+				}
+			});
+		});
+	}));
+
 };

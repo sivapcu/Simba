@@ -9,5 +9,5 @@
     * `npm install`
     * `bower Install`
 * Starting the application
-    *  Either `nodemon server.js` or `node server.js`
+    *  `npm start`
     * Access the application at `http://localhost:3000/`

@@ -1,2 +1,1 @@
-// public/js/app.js
-angular.module('simbaApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'LoginCtrl', 'SignupCtrl', 'UserService']);
+var app = angular.module('simbaApp', ['ngRoute', 'ngMessages']);

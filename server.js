@@ -6,25 +6,21 @@
 let express = require('express');
 let app = express(); // create our app with express
 let mongoose = require('mongoose');
-let morgan = require('morgan');
 let bodyParser = require('body-parser'); // pull information from HTML POST
 let methodOverride = require('method-override');
-let chalk = require('chalk'); // to the make console logging colorful
 
-var passport = require('passport');
-var flash    = require('connect-flash');
-var cookieParser = require('cookie-parser');
-var session      = require('express-session');
+let passport = require('passport');
+let flash = require('connect-flash');
+let cookieParser = require('cookie-parser');
+let session = require('express-session');
+
+let log4js = require('log4js');
+let log = log4js.getLogger('app');
 
 /**
  * Configurations
  */
 let db = require('./config/db');
-
-/**
- * Set the application port
- */
-let port = process.env.PORT || 3000;
 
 /**
  * Connect to the database
@@ -50,10 +46,14 @@ app.use(express.static(__dirname + '/public'));
 /**
  * Log every request to console
  */
-app.use(morgan('dev'));
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 
 // required for passport
-app.use(session({ secret: 'thisissessionsecret' })); // session secret
+app.use(session({
+    secret: 'thisissessionsecret', // session secret
+    resave: true,
+    saveUninitialized: true
+ }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
@@ -64,15 +64,38 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes/employee-routes')(app, passport);
 require('./app/routes/index-routes')(app, passport);
 
-/**
- * Start the application
- */
-app.listen(port);
+/// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
 
-/**
- * Inform user on starting the application
- */
-console.log('Application started on the port : ', port);
+/// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        log.error("Something went wrong:", err);
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    log.error("Something went wrong:", err);
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
 
 /**
  * Expose the app

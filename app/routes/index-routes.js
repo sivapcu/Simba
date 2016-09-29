@@ -1,18 +1,12 @@
 'use strict';
 
 let path = require('path');
+let log = require('log4js').getLogger("index-routes");
 
 module.exports = function(app, passport) {
     /**
      * Front end routes shall come here.
      */
-
-    /**
-     * Home page with login links
-     */
-    app.get('/', function(req, res) {
-        res.sendFile(path.join(__dirname, '../../public/index.html'));
-     });
 
     /**
      * Process the login form
@@ -22,10 +16,15 @@ module.exports = function(app, passport) {
              if(err) {
                  return next(err);
              }
-             if(user === false) {
-                 res.status(401).send(req.flash('loginMessage'));
+             if(!user) {
+                 return res.send({success:false, message: info});
              } else {
-                 res.status(200).send(req.flash('loginMessage'));
+                 req.logIn(user, function(err) {
+                     if(err) {
+                         return next(err);
+                     }
+                     return res.send({success : true, message : info});
+                 });
              }
          })(req, res, next);
      });
@@ -39,12 +38,34 @@ module.exports = function(app, passport) {
             if(err) {
                 return next(err);
             }
-            if(user === false) {
-                res.status(401).send(req.flash('signupMessage'));
+            if(!user) {
+                return res.send({success:false, message: info});
             } else {
-                res.status(200).send(req.flash('signupMessage'));
+                req.logIn(user, function(err) {
+                    if(err) {
+                        return next(err);
+                    }
+                    return res.send({success : true, message : info});
+                });
             }
         })(req, res, next);
+    });
+
+    app.post('/api/profile', isLoggedIn, function(req, res) {
+        res.send({success:true, user:req.user});
+    });
+
+    app.get('/api/loggedIn', function(req, res){
+        res.send(req.isAuthenticated() ? req.user : '0');
+    });
+
+    app.get('/auth/facebook', passport.authenticate('facebook', {scope:'email'}));
+
+    app.get('/auth/facebook/callback', function(req, res, next){
+        passport.authenticate('facebook', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+        });
     });
 
     /**
@@ -55,20 +76,15 @@ module.exports = function(app, passport) {
         res.redirect('/');
     });
 
-    /**
-     * Route to middleware to make sure the user is logged in
-     * @param  {[type]}   req  [description]
-     * @param  {[type]}   res  [description]
-     * @param  {Function} next [description]
-     * @return {Boolean}       [description]
-     */
     function isLoggedIn(req, res, next) {
         // if user is authenticated in the session, carry on
         if (req.isAuthenticated()) {
+            log.debug("**************** Authentication Successful **********************");
             return next();
+        } else {
+            log.debug("**************** Authentication Failed **********************");
+            return res.sendStatus(401);
         }
-        // if not redirect them to the home page
-        res.redirect('/');
     }
 
     // route to handle all angular requests

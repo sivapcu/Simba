@@ -107,12 +107,16 @@ module.exports = function(passport) {
 		clientID: authConfig.facebookAuth.clientID,
 		clientSecret: authConfig.facebookAuth.clientSecret,
 		callbackURL: authConfig.facebookAuth.callbackURL
-	}, function(accessToken, refreshToken, profile, done){
-
+	},
+    // facebook will send back the tokens and profile
+    function(accessToken, refreshToken, profile, done){
+        // asynchronous
 		process.nextTick(function(){
-			console.log(accessToken);
-			console.log(refreshToken);
-			console.log(profile);
+			console.log('AccessToken : '+accessToken);
+			console.log('RefreshToken : '+refreshToken);
+			console.log('Profile : ');
+            console.log(profile);
+            // find the user in the database based on their facebook id
 			User.findOne({'facebook.id': profile.id}, function(err, user){
 				if(err) {
                     return done(err);
@@ -123,13 +127,15 @@ module.exports = function(passport) {
                 } else{
 					var newUser = new User();
 					newUser.facebook.id = profile.id;
-					newUser.facebook.token = accessToken;
-					newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
-					newUser.facebook.email = profile.emails[0].value;
+					newUser.facebook.accessToken = accessToken;
+                    newUser.facebook.displayName = profile.displayName;
+					newUser.facebook.firstName = profile.name.givenName;
+                    newUser.facebook.lastName = profile.name.familyName;
+					newUser.facebook.email = profile.emails? profile.emails[0].value : profile.id;
 
 					newUser.save(function(err){
 						if(err) {
-                            return done(err);
+                            throw err;
                         }
 						return done(null, newUser);
 					});
